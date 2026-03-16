@@ -1,7 +1,18 @@
 import React from "react";
+import { useForm } from "react-hook-form";
 import { Link } from "react-router";
 
 const Login = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm();
+  const onSubmit = async (data) => {
+    await new Promise((resolve) => setTimeout(resolve, 2000)); // fake 2s delay
+    console.log(data);
+  };
+
   return (
     <div>
       <div className="hero bg-base-200 min-h-screen">
@@ -20,16 +31,41 @@ const Login = () => {
                 Now
               </p>
             </div>
-            <fieldset className="fieldset">
-              <label className="label">Email</label>
-              <input type="email" className="input" placeholder="Email" />
-              <label className="label">Password</label>
-              <input type="password" className="input" placeholder="Password" />
-              <div>
-                <a className="link link-hover">Forgot password?</a>
-              </div>
-              <button className="btn btn-neutral mt-4">Login</button>
-            </fieldset>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <fieldset className="fieldset">
+                <label className="label">Email</label>
+                <input
+                  {...register("email", { required: "Email is Required" })}
+                  type="email"
+                  className="input"
+                  placeholder="Email"
+                />
+                {errors.email && (
+                  <p className="text-error">{errors.email.message}</p>
+                )}
+                <label className="label">Password</label>
+                <input
+                  {...register("password", {
+                    required: "Password is required",
+                  })}
+                  type="password"
+                  className="input"
+                  placeholder="Password"
+                />
+                {errors.password && (
+                  <p className="text-error">{errors.password.message}</p>
+                )}
+                <div>
+                  <a className="link link-hover">Forgot password?</a>
+                </div>
+                <button
+                  className="btn btn-neutral mt-4"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "loging..." : "Login"}
+                </button>
+              </fieldset>
+            </form>
           </div>
         </div>
       </div>
