@@ -1,24 +1,22 @@
 import React from "react";
 
 const Product = ({ product }) => {
-  const { title, image, price_min, price_, max } = product;
+  const { title, image, price_min, price_max } = product;
   console.log(title, image);
   return (
     <div>
-      <div className="card bg-base-100 w-96 shadow-sm">
-        <figure className="px-10 pt-10">
-          <img src={image} alt="Shoes" className="rounded-xl" />
-        </figure>
-        <div className="card-body items-center text-center">
-          <h2 className="card-title">{title}</h2>
-          <img src={image} alt="" />
-          <p>
-            A card component has a figure, a body part, and inside body there
-            are title and actions parts
+      <div className="card bg-base-100 w-96 h-110  shadow-sm  ">
+        <div className=" p-3 card-body  border-2 border-gray-200 ">
+          <img className="h-69" src={image} alt="" />
+          <h2 className="card-title text-left">{title}</h2>
+          <p className="flex items-center text-primary font-medium ">
+            <span class="material-symbols-outlined">attach_money</span>
+            {price_min}-{price_max}
           </p>
-          <div className="card-actions">
-            <button className="btn btn-primary">Buy Now</button>
-          </div>
+
+          <button className="border border-primary w-full text-primary p-2 rounded-sm">
+            View Details
+          </button>
         </div>
       </div>
     </div>
