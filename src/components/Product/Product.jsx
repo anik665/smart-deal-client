@@ -1,7 +1,8 @@
 import React from "react";
+import { Link } from "react-router";
 
 const Product = ({ product }) => {
-  const { title, image, price_min, price_max } = product;
+  const { _id, title, image, price_min, price_max } = product;
   console.log(title, image);
   return (
     <div>
@@ -14,9 +15,11 @@ const Product = ({ product }) => {
             {price_min}-{price_max}
           </p>
 
-          <button className="border border-primary w-full text-primary p-2 rounded-sm">
-            View Details
-          </button>
+          <Link to={`/productsDetails/${_id}`}>
+            <button className="border border-primary w-full text-primary p-2 rounded-sm">
+              View Details
+            </button>
+          </Link>
         </div>
       </div>
     </div>
