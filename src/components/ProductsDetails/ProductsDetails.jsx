@@ -1,6 +1,7 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLoaderData, useNavigate } from "react-router";
 import { AuthContex } from "../../contex/AuthContex";
+import Swal from "sweetalert2";
 
 const ProductsDetails = () => {
   const data = useLoaderData();
@@ -9,8 +10,9 @@ const ProductsDetails = () => {
   const handelbidsModel = () => {
     bidsModalRef.current.showModal();
   };
+  const [bids, setbids] = useState([]);
   const {
-    _id,
+    _id: productId,
     title,
     image,
     price_min,
@@ -26,13 +28,24 @@ const ProductsDetails = () => {
     location,
     email,
   } = data;
+  useEffect(() => {
+    fetch(`http://localhost:3000/products/bids/${productId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("bids for products", data);
+        setbids(data);
+      });
+  }, [productId]);
+  // console.log(_id);
+  // console.log(bids);
+
   // console.log(title);
 
   if (!data) {
     return <div>Loading or Product not found...</div>;
   }
   const { user } = useContext(AuthContex);
-  console.log(user);
+  // console.log(user?.user);
   const HandelBIds = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -43,10 +56,10 @@ const ProductsDetails = () => {
     const price = form.price.value;
     // const contact = form.contact.value;
     const bidsInfo = {
-      product: _id,
+      product: productId,
       buyer_Name: buyerName,
       buyer_email: buyerEmail,
-      bids_price: price,
+      bids_price: parseFloat(price),
     };
     fetch("http://localhost:3000/bids", {
       method: "POST",
@@ -56,12 +69,30 @@ const ProductsDetails = () => {
       body: JSON.stringify(bidsInfo),
     })
       .then((res) => res.json())
-      .then((data) => console.log("after data post ", data));
+      .then((data) => {
+        if (data.insertedId) {
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Your bids has been placed",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          console.log(data);
+          bidsModalRef.current.close();
+        }
+        const newBidObject = { ...bidsInfo, _id: data.insertedId };
+        const updateBids = [...bids, newBidObject];
+        updateBids.sort((a, b) => b.bids_price - a.bids_price);
+
+        setbids(updateBids);
+      });
+    //  console.log("after data post ", data)
   };
 
   return (
-    <div className="bg-[#D9D9D9]">
-      <div className=" flex gap-10 mx-auto w-360 p-5">
+    <div className="bg-[#D9D9D9]  mx-auto w-360 p-5">
+      <div className=" flex gap-10">
         <div className="  w-150">
           <img src={image} className="w-full" alt="" />
           <div className="bg-[#FFFFFF] p-3 rounded-lg mt-8 ">
@@ -84,7 +115,7 @@ const ProductsDetails = () => {
         <div className=" mt-3.5 w-204.75 ">
           <button
             onClick={() => navigate(-1)}
-            to={`/productsDetails/${_id}`}
+            to={`/productsDetails/${productId}`}
             className="flex "
           >
             <span class="material-symbols-outlined">arrow_back</span> Back to
@@ -102,7 +133,7 @@ const ProductsDetails = () => {
             <h2 className="font-bold">Product Details</h2>
             <p className="">
               <span className="font-semibold">Product id : </span>
-              {_id}
+              {productId}
             </p>
             <p className="">
               <span className="font-semibold">Posted : </span>
@@ -224,6 +255,65 @@ const ProductsDetails = () => {
             </div>
           </dialog>
         </div>
+      </div>
+      <div
+        className="mt-40
+      "
+      >
+        <h2 className="font-bold text-5xl">
+          {" "}
+          Bids For This Products:{" "}
+          <span className="text-primary">{bids.length}</span>
+        </h2>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="table">
+          {/* head */}
+          <thead>
+            <tr>
+              <th>Sl No</th>
+              <th>Product</th>
+              <th>Buyer info </th>
+              <th>Bids Price</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* row 1 */}
+            {bids.map((bid, index) => (
+              <tr>
+                <th>
+                  <label>{index + 1}</label>
+                </th>
+                <td>{bid.product}</td>
+                <td>
+                  <div className="flex items-center gap-3">
+                    <div className="avatar">
+                      <div className="mask mask-squircle h-12 w-12">
+                        <img
+                          src="https://img.daisyui.com/images/profile/demo/2@94.webp"
+                          alt="Avatar Tailwind CSS Component"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <div className="font-bold">{bid.buyer_Name}</div>
+                      <div className="text-sm opacity-50">United States</div>
+                    </div>
+                  </div>
+                  <br />
+                  <span className="badge badge-ghost badge-sm">
+                    Desktop Support Technician
+                  </span>
+                </td>
+                <td>{bid.bids_price}</td>
+                <th>
+                  <button className="btn btn-ghost btn-xs">details</button>
+                </th>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
