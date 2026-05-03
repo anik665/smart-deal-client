@@ -11,7 +11,7 @@ const Product = ({ product }) => {
           <img className="h-69" src={image} alt="" />
           <h2 className="card-title text-left">{title}</h2>
           <p className="flex items-center text-primary font-medium ">
-            <span class="material-symbols-outlined">attach_money</span>
+            <span className="material-symbols-outlined">attach_money</span>
             {price_min}-{price_max}
           </p>
 

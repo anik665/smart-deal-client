@@ -10,10 +10,10 @@ const Bannar = () => {
         <h2 className="text-7xl text-center text-[#001931] font-bold">
           Deal your <span className="text-primary">Products</span>
           <br />
-          <h3 className="text-center">
+          <span className="text-center">
             {" "}
             in a <span className="text-primary">Smart</span> way !
-          </h3>
+          </span>
         </h2>
         <p className="text-gray-400 mt-1.5 text-center">
           SmartDeals helps you sell, resell, and shop from trusted local sellers
