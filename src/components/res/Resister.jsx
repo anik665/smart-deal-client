@@ -1,9 +1,12 @@
 import React, { use, useContext } from "react";
 import { AuthContex } from "../../contex/AuthContex";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 
 const Resister = () => {
   const { signInWithGoogle } = useContext(AuthContex);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
   const handelGoogle = () => {
     signInWithGoogle()
       .then((res) => {
@@ -23,7 +26,7 @@ const Resister = () => {
           body: JSON.stringify(newUSer),
         })
           .then((res) => res.json())
-          .then((data) => console.log("data after save", data));
+          .then((data) => console.log("data after save", data), navigate(from));
       })
       .catch((err) => {
         console.log(err);

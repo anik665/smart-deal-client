@@ -29,7 +29,9 @@ const ProductsDetails = () => {
     email,
   } = data;
   useEffect(() => {
-    fetch(`http://localhost:3000/products/bids/${productId}`)
+    fetch(`http://localhost:3000/products/bids/${productId}`, {
+      headers: `Brear ${user.accessToken}`,
+    })
       .then((res) => res.json())
       .then((data) => {
         console.log("bids for products", data);
