@@ -29,6 +29,9 @@ const Navber = () => {
           <li>
             <NavLink to={"/mybids"}>MyBids</NavLink>
           </li>
+          <li>
+            <NavLink to={"/createProduct"}>Create Product</NavLink>
+          </li>
         </>
       )}
     </>

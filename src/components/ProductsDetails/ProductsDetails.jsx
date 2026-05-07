@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLoaderData, useNavigate } from "react-router";
 import { AuthContex } from "../../contex/AuthContex";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 const ProductsDetails = () => {
   const data = useLoaderData();
@@ -29,15 +30,28 @@ const ProductsDetails = () => {
     email,
   } = data;
   useEffect(() => {
-    fetch(`http://localhost:3000/products/bids/${productId}`, {
-      headers: `Brear ${user.accessToken}`,
-    })
-      .then((res) => res.json())
+    axios
+      .get(`http://localhost:3000/products/bids/${productId}`, {
+        headers: {
+          authorization: `Bearer ${user.accessToken}`,
+        },
+      })
       .then((data) => {
-        console.log("bids for products", data);
-        setbids(data);
+        console.log("after axios get", data.data);
+        setbids(data.data);
       });
   }, [productId]);
+
+  // useEffect(() => {
+  //   fetch(`http://localhost:3000/products/bids/${productId}`, {
+  //     headers: `Brear ${user.accessToken}`,
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log("bids for products", data);
+  //       setbids(data);
+  //     });
+  // }, [productId]);
   // console.log(_id);
   // console.log(bids);
 

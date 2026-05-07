@@ -14,6 +14,7 @@ import MyBids from "./components/MyBids/MyBids.jsx";
 import Login from "./components/log/Login.jsx";
 import ProductsDetails from "./components/ProductsDetails/ProductsDetails.jsx";
 import PrivateRoute from "./private/PrivateRoute.jsx";
+import CreateProduct from "./components/CreateProduct/CreateProduct.jsx";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <ProductsDetails></ProductsDetails>{" "}
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/createProduct",
+        element: (
+          <PrivateRoute>
+            <CreateProduct></CreateProduct>
           </PrivateRoute>
         ),
       },
