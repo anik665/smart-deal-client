@@ -1,12 +1,14 @@
 import React from "react";
 import useAuth from "../../hooks/useAuth";
-import axios from "axios";
+// import axios from "axios";
 import Swal from "sweetalert2";
-import useAxiosInstance from "../../hooks/useAxionInstance";
+// import useAxiosInstance from "../../hooks/useAxionInstance";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const CreateProduct = () => {
   const { user } = useAuth();
-  const axiosInstace = useAxiosInstance();
+  // const axiosInstace = useAxiosInstance();
+  const AxiosSecure = useAxiosSecure();
   const HandelCreateProduct = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -22,7 +24,7 @@ const CreateProduct = () => {
       email: user.email,
       buyer_email: user.displayName,
     };
-    axiosInstace.post("/products", newProduct).then((res) => {
+    AxiosSecure.post("/products", newProduct).then((res) => {
       console.log(res.data);
       if (res.data.insertedId) {
         Swal.fire({
